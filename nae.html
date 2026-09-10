@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>하랑의 생일 기념 롤링페이퍼</title>
+    <link href="https://fonts.googleapis.com/css2?family=Gowun+Dodum&family=Jua&display=swap" rel="stylesheet">
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: #f8f1e5;
+            background-image: url('https://www.transparenttextures.com/patterns/p6.png');
+            font-family: 'Gowun Dodum', sans-serif;
+            margin: 0;
+            padding: 30px 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        h1 {
+            font-family: 'Jua', sans-serif; 
+            color: #8d6e63;
+            text-shadow: 2px 2px 0px rgba(255, 255, 255, 0.5);
+            margin: 0 0 25px 0;
+            font-size: 2.2rem;
+        }
+
+        /* 롤링페이퍼 보드: Flex 레이아웃으로 자동 정렬 */
+        #rolling-paper-board {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            align-content: flex-start;
+            align-items: flex-start; /* 높이 동기화 현상 차단  */
+            gap: 35px 25px; /* 메모지 간 상하, 좌우 간격 보장 */
+            width: 100%;
+            max-width: 1050px;
+            min-height: 70vh;
+            background-color: rgba(255, 255, 255, 0.6);
+            border: 6px solid #d7ccc8;
+            border-radius: 16px;
+            box-shadow: inset 0 0 20px rgba(0,0,0,0.05), 0 8px 20px rgba(0,0,0,0.06);
+            padding: 40px 30px; /* 상하좌우 안전 여백으로 잘림 원천 차단 */
+        }
+
+        /* 개별 메시지 스티커 */
+        .message {
+            position: relative;
+            width: 250px; /* 장문에 맞춰 가로 폭 확장 */
+            min-height: 130px; /* 최소 세로 높이 */
+            height: fit-content; /* 글자 길이에만 딱 맞게 세로 길이 자동 조절 */
+            padding: 22px 18px 14px; /* 상단 테이프 자리 확보 및 여백 */
+            border-radius: 6px;
+            box-shadow: 2px 4px 10px rgba(0,0,0,0.12);
+
+            font-size: 15px;
+            line-height: 1.6;
+            font-size: 15px;
+            cursor: pointer;
+            user-select: none;
+            color: #333;
+
+            white-space: pre-line; /* 백틱 안의 줄바꿈(엔터)을 화면에 그대로 반영 */
+            word-break: break-all; /* 단어가 길어도 메모지 밖으로 삐져나가지 않게 강제 줄바꿈 */
+            text-align: left; /* 장문 가독성을 위해 왼쪽 정렬 */
+
+            /* 세로 배치 (본문은 위, 작성자는 아래)*/
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+
+            cursor: pointer;
+            user-select: none;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .message:hover {
+            box-shadow: 4px 10px 20px rgba(0,0,0,0.22);
+            z-index: 50 !important;
+        }
+
+        /* 테이프 자국 */
+        .message::before {    
+            content: '';
+            position: absolute;
+            top: -9px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 55px;
+            height: 18px;
+            background-color: rgba(255, 255, 255, 0.75);
+            border: 1px dashed rgba(0, 0, 0, 0.15);
+        }
+    </style>
+</head>
+<body>
+
+    <h1>17번째 생일인 하랑이를 위한 우리의 마음</h1>
+
+    <div id="rolling-paper-board"></div>
+
+    <script>
+        const messagesList = [
+            {
+                author: "파편",
+                text: `축하해!@@!!축하해!@@!!축하해!@@!!축하해!@@!!축하해!@@!!
+                축하해!@@!!축하해!@@!!축하해!@@!!축하해!@@!!축하해!@@!!
+                축하해!@@!!축하해!@@!!축하해!@@!!축하해!@@!!축하해!@@!!
+                축하해!@@!!축하해!@@!!축하해!@@!!축하해!@@!!축하해!@@!!
+                축하해!@@!!축하해!@@!!축하해!@@!!축하해!@@!!축하해!@@!!`
+            },
+
+            {
+                author: "별하",
+                text: `To. 하랑님
+                하랑님 안녕하세여 저 별하입니다
+                뭐 딱히 대화도 한번 안해봤지만 
+                앞으로 친해질수 있기를 바라고 
+                생일 축하드려요! 행복한 하루 보내세요!`
+            },
+
+            {
+                author: "아리",
+                text: `생축!`
+            },
+
+            {
+                author: "이연",
+                text: `생일 축하해요, 
+                좋은 하루 보내시길`
+            },
+
+            {
+                author: "도화지",
+                text: `임하랑씌 생일 축하한다 
+                니 안지 얼마 안된거 같은데 
+                벌써 1년넘고 너의 생일이 왔구나 
+                그사이에 음 여러 사건(?)이있었지만 
+                우리 다 극복하고 같이 지내온거 같다 
+                내가 뭐 많이 해준거 없는거 같은데 
+                넌 나한데 많이 해준거 많은거 같다 
+                생일축하한다~~`
+            },
+
+            {
+                author: "Selena Aube",
+                text: `하랑씨!!!!!!!생일축하해요!!@!!!!!!!!!!! 
+                햅피!!!@!!!!!!! 벌스데이!!!!!@!!!@!!!!!!!!!
+                그대를 진심으로 축하합니다악!!!!!!!!!@!!!!@@!!!!!!!! 
+                언젠가 이야기 해보고싶어요!!!!@!!!!!! 
+                생신축하드려요!!!!!!!!!!!@!!!!!`
+            },
+
+            {
+                author: "구미호 이설",
+                text: `To.아가 백호
+                생일 축하하고 1개월만에 구독자 80명?는거 실화? 
+                미친거지 암튼 곧 구독자 100명도 축하고 생일도 축하고 
+                운로언니랑 우댜댜댜 재밋게 보내고 마싯는거 많이 먹고 
+                조은시간 보내 빠빠이`
+            }
+
+        ];
+
+        const colorThemes = [
+            { bg: "#fff9c4", border: "#fbc02d" }, // 레몬
+            { bg: "#ffe0b2", border: "#ffa726" }, // 피치
+            { bg: "#e1f5fe", border: "#4fc3f7" }, // 하늘
+            { bg: "#e8f5e9", border: "#81c784" }, // 민트
+            { bg: "#f3e5f5", border: "#ba68c8" }, // 연보라
+            { bg: "#fce4ec", border: "#f06292" }  // 핑크
+        ];
+
+        function renderMessages() {
+            const board = document.getElementById('rolling-paper-board');
+            if (!board) return;
+            board.innerHTML = '';
+
+            messagesList.forEach((item, index) => {
+                const messageEl = document.createElement('div');
+                messageEl.className = 'message';
+
+                messageEl.innerHTML = `
+                <div style="flex-grow: 1; width: 100%;">${item.text}</div>
+                <div style="width: 100%; text-align: right; margin-top: 10px; font-weight: bold; color: #555;">- ${item.author}</div>
+            `
+
+                // 색상 테마 배정
+                const theme = colorThemes[index % colorThemes.length];
+                messageEl.style.backgroundColor = theme.bg;
+                messageEl.style.borderBottom = `3px solid ${theme.border}`;
+
+                // 자연스러운 손맛을 위한 미세 오차 부여 (회전 -6~6도, 상하 미세이동 -8~8px)
+                const rotate = (Math.random() - 0.5) * 12;
+                const translateY = (Math.random() - 0.5) * 16;
+                
+                messageEl.style.transform = `translateY(${translateY}px) rotate(${rotate}deg)`;
+
+                // 마우스 호버 인터랙션
+                messageEl.addEventListener('mouseenter', () => {
+                    messageEl.style.transform = `translateY(${translateY - 5}px) rotate(${rotate}deg) scale(1.06)`;
+                });
+                messageEl.addEventListener('mouseleave', () => {
+                    messageEl.style.transform = `translateY(${translateY}px) rotate(${rotate}deg) scale(1)`;
+                });
+
+                board.appendChild(messageEl);
+            });
+        }
+
+        window.addEventListener('load', renderMessages);
+    </script>
+</body>
+</html>
