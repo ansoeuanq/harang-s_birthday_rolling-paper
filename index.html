@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>하랑의 생일 기념 롤링페이퍼</title>
-    <link href="https://fonts.googleapis.com/css2?family=Gamja+Flower&family=Nanum+Pen+Script&family=Jua&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Alex+Brush&family=Gamja+Flower&family=Nanum+Pen+Script&family=Jua&display=swap" rel="stylesheet">
     <style>
         * {
             box-sizing: border-box;
@@ -179,7 +179,7 @@
     </div>
 
     <script>
-        const stictyMessages = [
+        const stickyMessages = [
             {
                 author: "파편",
                 text: `축하해!@@!!축하해!@@!!축하해!@@!!축하해!@@!!축하해!@@!!
@@ -262,7 +262,8 @@
         // 2페이지용: 긴 편지
         const longLetter = 
             `안녕 하랑아!! 생일축하한다!! 
-            <img src = "unlo_picture.png" alt = "생일 그림" style = "max-width: 100%";
+            <img src = "unlo_picture.png" alt = "생일 그림" 
+                        style = "max-width: 100%;
                         border-radius: 8px; 
                         margin: 20px 0;"">
             우리가 처음 본지 벌써 1년이 넘었네! 
@@ -324,14 +325,22 @@
                 // [1페이지 렌더링]: 포스트잇 목록 생성
                 if (currentPage === 1) 
                 {
-                    stictyMessages.forEach((item, index) => 
+                    stickyMessages.forEach((item, index) => 
                     {
                         const messageEl = document.createElement('div');
                         messageEl.className = 'message';
+                        
+                        const authorStyle = (item.author.includes('Aube'))
+                            ? "font-family: 'Alex Brush', cursive; font-size: 24px; font-weight: normal;"
+                            : "font-family: 'Gamja Flower', cursive; font-size: 16px; font-weight: bold;";
 
                         messageEl.innerHTML = `
                         <div style="flex-grow: 1; width: 100%;">${item.text}</div>
-                        <div style="width: 100%; text-align: right; margin-top: 10px; font-weight: bold; color: #555;">- ${item.author}</div>
+                        <div style="width: 100%; text-align: right; 
+                                    margin-top: 10px; 
+                                    font-weight: bold; 
+                                    color: #555;
+                                    ${authorStyle}">- ${item.author}</div>
                         `;
             
                         // 색상 테마 배정
@@ -377,10 +386,10 @@
                     렌더링 중 에러 발생: ${error.message}</div>`;
             }
 
-            updadePaginationUI();
+            updatePaginationUI();
         }
 
-        function updadePaginationUI()
+        function updatePaginationUI()
         {
             const pageInfo = document.getElementById('page-info');
             const prevBtn = document.getElementById('prev-btn');
@@ -397,7 +406,7 @@
             renderBoard();
         }
 
-        window.addEventListener('load', renderBoard);
+        renderBoard()
     </script>
 </body>
 </html>
