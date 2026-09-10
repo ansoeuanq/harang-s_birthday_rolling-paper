@@ -10,7 +10,8 @@
             box-sizing: border-box;
         }
 
-        body {
+        body 
+        {
             background-color: #f8f1e5;
             background-image: url('https://www.transparenttextures.com/patterns/p6.png');
             font-family: 'Gowun Dodum', sans-serif;
@@ -22,7 +23,8 @@
             min-height: 100vh;
         }
 
-        h1 {
+        h1 
+        {
             font-family: 'Jua', sans-serif; 
             color: #8d6e63;
             text-shadow: 2px 2px 0px rgba(255, 255, 255, 0.5);
@@ -31,7 +33,8 @@
         }
 
         /* 롤링페이퍼 보드: Flex 레이아웃으로 자동 정렬 */
-        #rolling-paper-board {
+        #rolling-paper-board 
+        {
             display: flex;
             flex-wrap: wrap;
             justify-content: center;
@@ -48,8 +51,9 @@
             padding: 40px 30px; /* 상하좌우 안전 여백으로 잘림 원천 차단 */
         }
 
-        /* 개별 메시지 스티커 */
-        .message {
+        /* ---1page 개별 메시지 포스트잇 */
+        .message 
+        {
             position: relative;
             width: 250px; /* 장문에 맞춰 가로 폭 확장 */
             min-height: 130px; /* 최소 세로 높이 */
@@ -79,13 +83,15 @@
             transition: transform 0.2s ease, box-shadow 0.2s ease;
         }
 
-        .message:hover {
+        .message:hover 
+        {
             box-shadow: 4px 10px 20px rgba(0,0,0,0.22);
             z-index: 50 !important;
         }
 
         /* 테이프 자국 */
-        .message::before {    
+        .message::before 
+        {    
             content: '';
             position: absolute;
             top: -9px;
@@ -97,6 +103,63 @@
             border: 1px dashed rgba(0, 0, 0, 0.15);
         }
 
+        /* --- 2page: 긴 편지지 스타일 --- */
+        .long-letter 
+        {
+            width: 100%;
+            max-width: 800px;
+            min-height: 50vh;
+            background-color: #fffdf7;
+            padding: 40px 50px;
+            border-radius: 8px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+            border: 1px solid #e0d0b5;
+            font-size: 17px;
+            line-height: 1.9;
+            color: #444;
+            white-space: pre-line; /* 엔터 줄바꿈 인식 */
+            margin: 0 auto; /* 중앙 정렬 */
+        }
+
+        /* 하단 페이지 버튼 */
+        #pagination-controls 
+        {
+            margin-top: 25px;
+            display: flex;
+            gap: 20px;
+            align-items: center;
+            font-family: 'Jua', sans-serif;
+            font-size: 1.2rem;
+            color: #795548
+        }
+
+        #pagination-controls button 
+        {
+            background-color: #8d6e63;
+            color: white;
+            border: none;
+            padding: 8px 20px;
+            border-radius: 8px;
+            font-family: 'Gowun Dodum', sans-serif;
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: background-color 0.2s
+        }
+
+        #pagination-controls button:hover:not(:disabled) 
+        {
+            background-color: #8d6e63;
+        }
+
+        #pagination-controls button:disabled 
+        {
+            background-color: #d7ccc8;
+            cursor: not-allowed;
+            box-shadow: none;
+        }
+
     </style>
 </head>
 <body>
@@ -105,8 +168,14 @@
 
     <div id="rolling-paper-board"></div>
 
+    <div id = "pagination-controls">
+        <button id = "prev-btn" onclick = "changePage(1)"> ◀ </button>
+        <span id = "page-info"> 1 / 2 </span>
+        <button id = "next-btn" onclick = "changePage(2)"> ▶ </button>
+    </div>
+
     <script>
-        const messagesList = [
+        const stictyMessages = [
             {
                 author: "파편",
                 text: `축하해!@@!!축하해!@@!!축하해!@@!!축하해!@@!!축하해!@@!!
@@ -168,6 +237,12 @@
 
         ];
 
+        // 2페이지용: 긴 편지
+        const longLetter = 
+            `안녕연ㅇㅁㅇㅁ노어ㅕㅑㄴ무ㅗ어ㅗㄴ모ㅜㅠㅇㄴ머오ㅝ만오ㅓ
+            ㄴㅁㅇㄴㅁㅇㄴㅁㅇㄴㅁㅇㄴㅁㅇㄴㅁㅇㄴㅁㅇㄴㅁㅇ`
+        
+
         const colorThemes = [
             { bg: "#fff9c4", border: "#fbc02d" }, // 레몬
             { bg: "#ffe0b2", border: "#ffa726" }, // 피치
@@ -177,45 +252,91 @@
             { bg: "#fce4ec", border: "#f06292" }  // 핑크
         ];
 
-        function renderMessages() {
+        let currentPage = 1;
+
+        function renderBoard() 
+        {
             const board = document.getElementById('rolling-paper-board');
             if (!board) return;
+
             board.innerHTML = '';
+            
+            try
+            {
+                // [1페이지 렌더링]: 포스트잇 목록 생성
+                if (currentPage === 1) 
+                {
+                    stictyMessages.forEach((item, index) => 
+                    {
+                        const messageEl = document.createElement('div');
+                        messageEl.className = 'message';
 
-            messagesList.forEach((item, index) => {
-                const messageEl = document.createElement('div');
-                messageEl.className = 'message';
+                        messageEl.innerHTML = `
+                        <div style="flex-grow: 1; width: 100%;">${item.text}</div>
+                        <div style="width: 100%; text-align: right; margin-top: 10px; font-weight: bold; color: #555;">- ${item.author}</div>
+                        `;
+            
+                        // 색상 테마 배정
+                        const theme = colorThemes[index % colorThemes.length];
+                        messageEl.style.backgroundColor = theme.bg;
+                        messageEl.style.borderBottom = `3px solid ${theme.border}`;
 
-                messageEl.innerHTML = `
-                <div style="flex-grow: 1; width: 100%;">${item.text}</div>
-                <div style="width: 100%; text-align: right; margin-top: 10px; font-weight: bold; color: #555;">- ${item.author}</div>
-            `
+                        // 자연스러운 손맛을 위한 미세 오차 부여 (회전 -6~6도, 상하 미세이동 -8~8px)
+                        const rotate = (Math.random() - 0.5) * 12;
+                        const translateY = (Math.random() - 0.5) * 16;
+                    
+                        messageEl.style.transform = `translateY(${translateY}px) rotate(${rotate}deg)`;
 
-                // 색상 테마 배정
-                const theme = colorThemes[index % colorThemes.length];
-                messageEl.style.backgroundColor = theme.bg;
-                messageEl.style.borderBottom = `3px solid ${theme.border}`;
+                        // 마우스 호버 인터랙션
+                        messageEl.addEventListener('mouseenter', () => {
+                            messageEl.style.transform = `translateY(${translateY - 5}px) rotate(${rotate}deg) scale(1.06)`;
+                        });
+                        messageEl.addEventListener('mouseleave', () => {
+                            messageEl.style.transform = `translateY(${translateY}px) rotate(${rotate}deg) scale(1)`;
+                        });
 
-                // 자연스러운 손맛을 위한 미세 오차 부여 (회전 -6~6도, 상하 미세이동 -8~8px)
-                const rotate = (Math.random() - 0.5) * 12;
-                const translateY = (Math.random() - 0.5) * 16;
-                
-                messageEl.style.transform = `translateY(${translateY}px) rotate(${rotate}deg)`;
+                        board.appendChild(messageEl);
+                    });
 
-                // 마우스 호버 인터랙션
-                messageEl.addEventListener('mouseenter', () => {
-                    messageEl.style.transform = `translateY(${translateY - 5}px) rotate(${rotate}deg) scale(1.06)`;
-                });
-                messageEl.addEventListener('mouseleave', () => {
-                    messageEl.style.transform = `translateY(${translateY}px) rotate(${rotate}deg) scale(1)`;
-                });
+                } 
+               
+                else if (currentPage === 2) 
+                {
+                    // [2페이지 렌더링]: 긴 편지 하나만 생성
+                    const letterEl = document.createElement('div');
+                    letterEl.className = 'long-letter';
 
-                board.appendChild(messageEl);
-            });
+                    // HTML로 앞뒤 공백을 자르고 렌더링
+                    letterEl.innerHTML = longLetter.trim();
+
+                    board.appendChild(letterEl)
+                }
+            }
+
+            catch (error)
+            {
+                board.innerHTML = `<div style="color:red; font-size:18px;">
+                    렌더링 중 에러 발생: ${error.message}</div>`;
+            }
+
+            updadePaginationUI();
+        }
+
+        function updadePaginationUI()
+        {
+            document.getElementById('page-info').innerText = `${currentPage} / 2`
+
+            document.getElementById('prev-btn').disabled = (currentPage === 1);
+            document.getElementById('next-btn').disabled = (currentPage === 2);
         }
         
-        window.addEventListener('load', renderMessages);
+        function changePage(pageNum)
+        {
+            currentPage = pageNum;
+            renderBoard();
+        }
 
+        window.addEventListener('load', renderBoard);
     </script>
 </body>
 </html>
