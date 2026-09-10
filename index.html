@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>하랑의 생일 기념 롤링페이퍼</title>
-    <link href="https://fonts.googleapis.com/css2?family=Gowun+Dodum&family=Jua&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Gamja+Flower&family=Nanum+Pen+Script&family=Jua&display=swap" rel="stylesheet">
     <style>
         * {
             box-sizing: border-box;
@@ -55,16 +55,16 @@
         .message 
         {
             position: relative;
-            width: 250px; /* 장문에 맞춰 가로 폭 확장 */
+            width: 310px; /* 장문에 맞춰 가로 폭 확장 */
             min-height: 130px; /* 최소 세로 높이 */
             height: fit-content; /* 글자 길이에만 딱 맞게 세로 길이 자동 조절 */
             padding: 22px 18px 14px; /* 상단 테이프 자리 확보 및 여백 */
             border-radius: 6px;
             box-shadow: 2px 4px 10px rgba(0,0,0,0.12);
 
-            font-size: 15px;
+            font-family: 'Gamja Flower', cursive;
+            font-size: 19px;
             line-height: 1.6;
-            font-size: 15px;
             cursor: pointer;
             user-select: none;
             color: #333;
@@ -107,16 +107,20 @@
         .long-letter 
         {
             width: 100%;
-            max-width: 1100px;
+            max-width: 960px;
             min-height: 50vh;
             background-color: #fffdf7;
             padding: 40px 50px;
+
             border-radius: 8px;
             box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
             border: 1px solid #e0d0b5;
-            font-size: 17px;
+
+            font-family: 'Nanum Pen Script', cursive;
+            font-size: 24.7px;
             line-height: 1.9;
             color: #444;
+
             white-space: pre-line; /* 엔터 줄바꿈 인식 */
             margin: 0 auto; /* 중앙 정렬 */
         }
@@ -229,10 +233,28 @@
             {
                 author: "구미호 이설",
                 text: `To.아가 백호
-                생일 축하하고 1개월만에 구독자 80명?는거 실화? 
-                미친거지 암튼 곧 구독자 100명도 축하고 생일도 축하고 
-                운로언니랑 우댜댜댜 재밋게 보내고 마싯는거 많이 먹고 
-                조은시간 보내 빠빠이`
+                생일 축하하고 1개월만에 
+                구독자 80명?는거 실화? 
+                미친거지 암튼 곧 구독자 100명도 축하고 
+                생일도 축하고 운로언니랑 우댜댜댜 재밋게 보내고 
+                마싯는거 많이 먹고 조은시간 보내 빠빠이`
+            },
+
+            {
+                author: "신유승",
+                text: `하랑아 생일 축하한다. 
+                비록 우리가 알게된진 얼마 안됐지만, 그래도 더 친해져보자 우리. 
+                나에가 부탁한거에 내가 약간 "~~하면 좋을거 같은데?" 라고 해서
+                만든게 이 롤링페이퍼인데, 마음에 들진 모르겠다.. 
+                그래도 마음에 들었으면 좋겠네. 
+                나에랑 나랑 이거 만드는데 거의 7시간 정도 걸렸다... 흑.. 
+                크흠.. 아무튼 생일 축하하고! 오늘은 너의 날이니까
+                맛있는 것도 많이 먹고 나에랑 행복한 하루 보내길 빌게!!!
+                Happy birthday Harang!!`
+            },
+
+            {
+                author:""
             }
 
         ];
@@ -240,6 +262,9 @@
         // 2페이지용: 긴 편지
         const longLetter = 
             `안녕 하랑아!! 생일축하한다!! 
+            <img src = "unlo_picture.png" alt = "생일 그림" style = "max-width: 100%";
+                        border-radius: 8px; 
+                        margin: 20px 0;"">
             우리가 처음 본지 벌써 1년이 넘었네! 
             내 데뷔부터 봤다고 했으니 아마 403일쯤 되었을거야. 
             신기하다… 내 첫 시청자와 첫 우결자가 너 라는게… 참 운명같다… 
@@ -257,7 +282,8 @@
             로딩 페이지에 나온 센터에 있는 그림 그거. 1시간 넘게 그렸는데 5초만에 지나간다고 못봤지? 
             나 카빵이랑 노는시간에 이런거 준비하고! 만들었다. 짱이지?! 
             내가 못하는건 요리밖에 없다구!! 앞으로 많이 웃고 힘들땐 서로 기대가며 지낼수있는 파트너가 되자.(쑥스러워서 그렇다!!! 메가메가베스트보이프렌드라는것정도는 잊지않았지) 
-            내가 표현은 잘 못해도, 넌 내게 아주 소중한 사람이다.(정말 무슨말을 적을지 몰라서 고민하면서도 AI는 손도 안댔다. 유승님이 증인이다. 적을게 너무 많지만… 적당히 해야겠지) 
+            내가 표현은 잘 못해도, 넌 내게 아주 소중한 사람이다.(정말 무슨말을 적을지 몰라서 고민하면서도 AI는 손도 안댔다. 
+            유승님이 증인이다. 적을게 너무 많지만… 적당히 해야겠지) 
             내가 이번에는 너를 만나러 가지 못했지!!! 그치만 기다려라!!! 곧이다 곧. 
             어른이 되기까지 정말 얼마 안남았단말이다! 
             새벽에 쓰느라 조금 정신이 온전치 못하지만 이건 진심이다!! 
@@ -267,7 +293,11 @@
             케이크는 못만들어서… 여러가지 준비해봤는데 마음에 들지는 모르겠네. 
             생일 축하하고, 맛있는 거 많이 먹고, 영원처럼 행복해라. 
             いつもすごく好きだってこと！ 忘れなかったよね？ 連絡が取れなくても··· 待ってくれてありがとう。 君が私に出会ったことが、花が満開に咲くきっかけになりますように···
-            <div style = "text-align: right; margin-top: 40px; font-weight: bold; color: #795548">
+            <div style = "text-align: right; 
+                        margin-top: 40px;
+                        font-size: 30px; 
+                        font-weight: bold; 
+                        color: #795548">
                 - '나에'게 온 하랑이에게, 운로가. </div>`
         
 
