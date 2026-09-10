@@ -239,8 +239,7 @@
 
         // 2페이지용: 긴 편지
         const longLetter = 
-            `안녕연ㅇㅁㅇㅁ노어ㅕㅑㄴ무ㅗ어ㅗㄴ모ㅜㅠㅇㄴ머오ㅝ만오ㅓ
-            ㄴㅁㅇㄴㅁㅇㄴㅁㅇㄴㅁㅇㄴㅁㅇㄴㅁㅇㄴㅁㅇㄴㅁㅇ`
+            `안녕연ㅇㅁㅇㅁ노어ㅕㅑㄴ무ㅗ어ㅗㄴ모ㅜㅠㅇㄴ머오ㅝ만오ㅓ`
         
 
         const colorThemes = [
@@ -324,12 +323,15 @@
 
         function updadePaginationUI()
         {
-            document.getElementById('page-info').innerText = `${currentPage} / 2`
+            const pageInfo = document.getElementById('page-info');
+            const prevBtn = document.getElementById('prev-btn');
+            const nextBtn = document.getElementById('next-btn');
 
-            document.getElementById('prev-btn').disabled = (currentPage === 1);
-            document.getElementById('next-btn').disabled = (currentPage === 2);
+            if (pageInfo) pageInfo.innerText = `${currentPage} / 2`;
+            if (prevBtn) prevBtn.disabled = (currentPage === 1);
+            if (nextBtn) nextBtn.disabled = (currentPage === 2);
         }
-        
+
         function changePage(pageNum)
         {
             currentPage = pageNum;
