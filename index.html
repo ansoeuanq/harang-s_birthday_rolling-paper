@@ -169,44 +169,27 @@
             box-shadow: none;
         }
 
-        /* --- 포스트잇 떼고 붙이는 애니메이션 효과 --- */
-        @keyframes peelOff {
-            0% { transform: scale(1) rotate(0deg) translateY(0); opacity: 1; }
-            40% { 
-                transform: scale(1.02) rotate(-2deg) translateY(-10px); 
-                opacity: 0.9; 
-                box-shadow: 15px 25px 30px rgba(0,0,0,0.15); /* 종이가 살짝 들리는 느낌 */
-            } 
-            100% { 
-                transform: scale(1.1) rotate(-8deg) translateY(-200px) translateX(-100px); 
-                opacity: 0; /* 완전히 뜯겨 날아감 */
-            } 
+        /* --- 부드러운 페이드 & 슬라이드 전환 효과 --- */
+        @keyframes fadeOutUp 
+        {
+            0% { opacity: 1; transform: translateY(0); }
+            100% { opacity: 0; transform: translateY(-20px); }
         }
 
-        @keyframes stickOn {
-            0% { 
-                transform: scale(1.2) rotate(10deg) translateY(-150px) translateX(100px); 
-                opacity: 0; 
-            }
-            60% { 
-                transform: scale(1.02) rotate(1deg) translateY(5px); 
-                opacity: 0.9; 
-                box-shadow: 15px 25px 30px rgba(0,0,0,0.15); 
-            }
-            100% { 
-                transform: scale(1) rotate(0deg) translateY(0); 
-                opacity: 1; /* 제자리에 딱 붙음 */
-            } 
+        @keyframes fadeInDown 
+        {
+            0% { opacity: 0; transform: translateY(20px); }
+            100% { opacity: 1; transform: translateY(0); }
         }
 
-        .peeling-out {
-            animation: peelOff 0.45s forwards ease-in;
-            transform-origin: top left; /* 왼쪽 위 모서리를 잡고 뜯는 느낌 */
+        .page-exit 
+        {
+            animation: fadeOutUp 0.3s forwards ease-in;
         }
         
-        .sticking-in {
-            animation: stickOn 0.4s forwards ease-out;
-            transform-origin: center;
+        .page-enter 
+        {
+            animation: fadeInDown 0.4s forwards ease-out;
         }
 
     </style>
@@ -493,10 +476,10 @@
 
             const board = document.getElementById('rolling-paper-board');
 
-            // 1. 현재 화면을 떼어내서 날려버리는 애니메이션 시작
-            board.className = 'peeling-out'
+            // 1. 현재 화면을 살짝 위로 올라가면서 부드럽게 투명해짐
+            board.className = 'page-exit'
 
-            // 2. 0.45초 뒤에 내용물 교체
+            // 2. 0.3초 뒤(화면이 안 보일 때) 내용물 교체 및 스크롤 이동
             setTimeout
             (
                 () => 
@@ -505,10 +488,10 @@
                     renderBoard(); // 화면 안의 내용(포스트잇 <-> 긴 편지) 교체
 
                     // 내용이 바뀔 때 스크롤을 상단으로 끌어올림.
-                    window.scrollTo({ top: 0, behavior: 'smooth'});
+                    window.scrollTo({ top: 0, behavior: 'auto'});
 
                     // 3. 내용이 바뀐 뒤, 새 종이가 날아와서 붙는 애니메이션 시작
-                    board.className = 'sticking-in';
+                    board.className = 'page-enter';
 
                     // 4. 애니메이션이 끝나면 상태 초기화
                     setTimeout
@@ -519,7 +502,7 @@
                             isAnimating = false;
                         }, 400
                     );
-                }, 450
+                }, 300
             );
         }
 
