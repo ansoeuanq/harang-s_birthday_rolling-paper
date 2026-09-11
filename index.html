@@ -169,53 +169,44 @@
             box-shadow: none;
         }
 
-        /* --- 책 넘기는 3D 애니메이션 효과 --- */
-        @keyframes turnPageLeftOut 
-        {
-            0% { transform: perspective(1500px) rotateY(0deg); opacity: 1; }
-            100% { transform: perspective(1500px) rotateY(-90deg); opacity: 0; }
+        /* --- 포스트잇 떼고 붙이는 애니메이션 효과 --- */
+        @keyframes peelOff {
+            0% { transform: scale(1) rotate(0deg) translateY(0); opacity: 1; }
+            40% { 
+                transform: scale(1.02) rotate(-2deg) translateY(-10px); 
+                opacity: 0.9; 
+                box-shadow: 15px 25px 30px rgba(0,0,0,0.15); /* 종이가 살짝 들리는 느낌 */
+            } 
+            100% { 
+                transform: scale(1.1) rotate(-8deg) translateY(-200px) translateX(-100px); 
+                opacity: 0; /* 완전히 뜯겨 날아감 */
+            } 
         }
 
-        @keyframes turnPageRightIn 
-        {
-            0% { transform: perspective(1500px) rotateY(90deg); opacity: 0; }
-            100% { transform: perspective(1500px) rotateY(0deg); opacity: 1; }
+        @keyframes stickOn {
+            0% { 
+                transform: scale(1.2) rotate(10deg) translateY(-150px) translateX(100px); 
+                opacity: 0; 
+            }
+            60% { 
+                transform: scale(1.02) rotate(1deg) translateY(5px); 
+                opacity: 0.9; 
+                box-shadow: 15px 25px 30px rgba(0,0,0,0.15); 
+            }
+            100% { 
+                transform: scale(1) rotate(0deg) translateY(0); 
+                opacity: 1; /* 제자리에 딱 붙음 */
+            } 
         }
 
-        @keyframes turnPageRightOut 
-        {
-            0% { transform: perspective(1500px) rotateY(0deg); opacity: 1; }
-            100% { transform: perspective(1500px) rotateY(90deg); opacity: 0; }
+        .peeling-out {
+            animation: peelOff 0.45s forwards ease-in;
+            transform-origin: top left; /* 왼쪽 위 모서리를 잡고 뜯는 느낌 */
         }
-
-        @keyframes turnPageLeftIn 
-        {
-            0% { transform: perspective(1500px) rotateY(-90deg); opacity: 0; }
-            100% { transform: perspective(1500px) rotateY(0deg); opacity: 1; }
-        }
-
-        .turning-next-out 
-        {
-            animation: turnPageLeftOut 0.4s forwards ease-in;
-            transform-origin: left center;
-        }
-
-        .turning-next-in 
-        {
-            animation: turnPageRightIn 0.4s forwards ease-out;
-            transform-origin: right center;
-        }
-
-        .turning-prev-out 
-        {
-            animation: turnPageRightOut 0.4s forwards ease-in;
-            transform-origin: right center;
-        }
-
-        .turning-prev-in 
-        {
-            animation: turnPageLeftIn 0.4s forwards ease-out;
-            transform-origin: left center;
+        
+        .sticking-in {
+            animation: stickOn 0.4s forwards ease-out;
+            transform-origin: center;
         }
 
     </style>
@@ -502,13 +493,10 @@
 
             const board = document.getElementById('rolling-paper-board');
 
-            // 다음 페이지로 가는지, 이전 페이지로 가는지 판별
-            const isNext = pageNum > currentPage;
+            // 1. 현재 화면을 떼어내서 날려버리는 애니메이션 시작
+            board.className = 'peeling-out'
 
-            // 1. 현재 화면이 뒤집어지며 사라지는 애니메이션 시작
-            board.className = isNext ? 'turning-next-out' : 'turning-prev-out';
-
-            // 2. 0.4초(애니메이션 끝나는 시간) 뒤에 내용물 교체
+            // 2. 0.45초 뒤에 내용물 교체
             setTimeout
             (
                 () => 
@@ -516,10 +504,10 @@
                     currentPage = pageNum;
                     renderBoard(); // 화면 안의 내용(포스트잇 <-> 긴 편지) 교체
 
-                    // 3. 내용이 바뀐 뒤, 반대편에서 새 화면이 등장하는 애니메이션 시작
-                    board.className = isNext ? 'turning-next-in' : 'turning-next-in';
+                    // 3. 내용이 바뀐 뒤, 새 종이가 날아와서 붙는 애니메이션 시작
+                    board.className = 'sticking-in';
 
-                    // 4. 다시 0.4초 뒤에 애니메이션 전용 클래스를 떼어내서 상태 초기화 및 잠금 해제
+                    // 4. 애니메이션이 끝나면 상태 초기화
                     setTimeout
                     (
                         () =>
@@ -527,9 +515,9 @@
                             board.className = '';
                             isAnimating = false;
                         }, 400
-                    )
-                }
-            )
+                    );
+                }, 450
+            );
         }
 
         renderBoard()
