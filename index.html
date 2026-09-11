@@ -504,6 +504,9 @@
                     currentPage = pageNum;
                     renderBoard(); // 화면 안의 내용(포스트잇 <-> 긴 편지) 교체
 
+                    // 내용이 바뀔 때 스크롤을 상단으로 끌어올림.
+                    window.scrollTo({ top: 0, behavior: 'smooth'});
+
                     // 3. 내용이 바뀐 뒤, 새 종이가 날아와서 붙는 애니메이션 시작
                     board.className = 'sticking-in';
 
